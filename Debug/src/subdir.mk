@@ -4,13 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/lunarlander.cpp 
+../src/Main.cpp 
 
 OBJS += \
-./src/lunarlander.o 
+./src/Main.o 
 
 CPP_DEPS += \
-./src/lunarlander.d 
+./src/Main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
