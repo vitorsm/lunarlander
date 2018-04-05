@@ -23,7 +23,8 @@ public:
 
 private:
 	Floor *floor;
-
+	void drawTriangle(Coordinate *lastCoordinate, Coordinate *coordinate);
+	void drawRunway();
 };
 
 #endif /* CONTROLLERS_FLOORCONTROLLER_H_ */

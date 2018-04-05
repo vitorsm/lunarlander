@@ -28,10 +28,11 @@ public:
 	void printAllCoordinates();
 	vector<Coordinate*> *getCoordinates();
 	int getCoordinatesAmount();
+	Coordinate *getRunwayCoordinate();
 private:
 	int coordinatesAmount;
 	vector<Coordinate*> *coordinates;
-	Coordinate *coordinatePlaceToLand;
+	Coordinate *runwayCoordinate;
 	void closePolygon();
 };
 

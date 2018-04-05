@@ -16,8 +16,7 @@ using namespace std;
 
 
 void setGlOrtho() {
-
-	glOrtho(0.0, Params::SCREEN_WIDTH, 0.0, Params::SCREEN_HEIGHT, -1, 1);
+	glOrtho(0.0, (double) Params::SCREEN_WIDTH, 0.0, (double) Params::SCREEN_HEIGHT, -1, 1);
 }
 
 void setup() {

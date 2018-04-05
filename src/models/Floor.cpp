@@ -35,12 +35,13 @@ void Floor::generateFloor(int level) {
 	this->coordinates = new vector<Coordinate*>;
 
 //	int countRunway = rand() % (coordinatesAmount/2);
-	int coordinateXRunway = rand() % (Params::SCREEN_WIDTH - Params::RUNWAY_WIDTH));
+	int coordinateXRunway = rand() % (Params::SCREEN_WIDTH - Params::RUNWAY_WIDTH);
 
-	cout << "coordinates amount: " << coordinatesAmount << " | countRunway: " << countRunway << endl;
+	cout << "coordinates amount: " << coordinatesAmount << " | countRunway: " << coordinateXRunway << endl;
 	int lastX = 0;
 	int lastY = 0;
 	bool isRunway = false;
+	bool runwaySelected = false;
 
 	for (int i = 0; i < coordinatesAmount; i++) {
 		int x = 0;
@@ -64,19 +65,22 @@ void Floor::generateFloor(int level) {
 		y += lastY;
 		if (y < 0) y = 0;
 
-		Coordinate *coordinate = new Coordinate(x, y);
-		this->coordinates->push_back(coordinate);
-
-		if (i == countRunway) {
-			cout << "i = " << i << " e gerou runway" << endl;
-			this->coordinatePlaceToLand = new Coordinate(x, y);
+		if (x >= coordinateXRunway && !runwaySelected) {
+			if (x + Params::RUNWAY_WIDTH > Params::SCREEN_WIDTH) {
+				x -= (x + Params::RUNWAY_WIDTH) - Params::SCREEN_WIDTH;
+			}
+			cout << "x = " << x << " e gerou runway" << endl;
+			this->runwayCoordinate = new Coordinate(x, y);
 			lastX = x + Params::RUNWAY_WIDTH;
 			isRunway = true;
+			runwaySelected = true;
 		} else {
 			lastX = x;
 		}
-
 		lastY = y;
+
+		Coordinate *coordinate = new Coordinate(x, y);
+		this->coordinates->push_back(coordinate);
 
 		this->coordinatesAmount++;
 
@@ -106,4 +110,8 @@ vector<Coordinate*> *Floor::getCoordinates() {
 
 int Floor::getCoordinatesAmount() {
 	return this->coordinatesAmount;
+}
+
+Coordinate *Floor::getRunwayCoordinate() {
+	return this->runwayCoordinate;
 }
