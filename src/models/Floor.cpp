@@ -117,6 +117,10 @@ Coordinate *Floor::getRunwayCoordinate() {
 
 vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordinate, Coordinate *rightCoordinate) {
 
+//	cout << "leftCoordinate: " << leftCoordinate->getX() << ", rightCoordinate: " << rightCoordinate->getX() << endl;
+
+//	printAllCoordinates();
+
 	Coordinate *firstCoordinate = NULL;
 	Coordinate *lastCoordinate = NULL;
 
@@ -127,16 +131,20 @@ vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordin
 
 		if (firstCoordinate == NULL) {
 			firstCoordinate = coordinate;
-		} else if (coordinate->getX() <= leftCoordinate->getX() && coordinate->getX() > firstCoordinate->getX()) {
+		} else if (coordinate->getX() <= leftCoordinate->getX() &&
+				(coordinate->getX() > firstCoordinate->getX())) {
 			firstCoordinate = coordinate;
 		}
 
 		if (lastCoordinate == NULL) {
 			lastCoordinate = coordinate;
-		} else if (coordinate->getX() >= rightCoordinate->getX() && coordinate->getX() < lastCoordinate->getX()) {
+		} else if (coordinate->getX() >= rightCoordinate->getX() &&
+				(lastCoordinate->getX() < rightCoordinate->getX() || coordinate->getX() < lastCoordinate->getX())) {
 			lastCoordinate = coordinate;
 		}
 	}
+
+//	cout << "first: " << firstCoordinate->getX() << ", last: " << lastCoordinate->getX() << endl;
 
 	for (int i = 0; i < this->coordinatesAmount - 1; i++) {
 		Coordinate *coordinate = this->coordinates->at(i);

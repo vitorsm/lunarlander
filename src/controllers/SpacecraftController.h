@@ -33,6 +33,7 @@ private:
 	Coordinate *position;
 	long timeLastUpdateMotor;
 	long timeLastUpdateDirection;
+	FloorController *floorController;
 };
 
 #endif /* CONTROLLERS_SPACECRAFTCONTROLLER_H_ */

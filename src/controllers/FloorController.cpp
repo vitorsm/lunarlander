@@ -23,6 +23,8 @@ void FloorController::generateFloor() {
 
 void FloorController::drawFloor() {
 
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
 	vector<Coordinate*> *coordinates = this->floor->getCoordinates();
 
 	if (coordinates != NULL) {
@@ -36,6 +38,7 @@ void FloorController::drawFloor() {
 	}
 
 	this->drawRunway();
+	glPopMatrix();
 }
 
 void FloorController::drawTriangle(Coordinate *lastCoordinate, Coordinate *coordinate) {
@@ -73,7 +76,6 @@ void FloorController::drawRunway() {
 }
 
 bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
-
 	Coordinate *leftCoordinate = new Coordinate(spacecraftPosition->getX() - Params::SPACECRAFT_WIDTH / 2,
 			spacecraftPosition->getY() - Params::SPACECRAFT_HEIGHT / 2);
 
@@ -82,10 +84,12 @@ bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 
 	vector<Coordinate*> *coordinates = this->floor->getFloorCoordinateByPosition(leftCoordinate, rightCoordinate);
 
+//	cout << "Qtd: " << coordinates->size() << endl;
+
 	for (int i = 0; i < coordinates->size(); i++) {
 
 		Coordinate *coordinate = coordinates->at(i);
-		cout << "Pegou: " << coordinate->getX() << ", " << coordinate->getY() << endl;
+//		cout << "Pegou: " << coordinate->getX() << ", " << coordinate->getY() << endl;
 
 	}
 
@@ -95,5 +99,13 @@ bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 }
 
 bool FloorController::isOnTheRunway(Coordinate *spacecraftPosition) {
-	return false;
+	Coordinate *coordinate = this->floor->getRunwayCoordinate();
+
+	float leftPosition = spacecraftPosition->getX() - Params::SPACECRAFT_WIDTH / 2;
+	float rightPosition = spacecraftPosition->getX() + Params::SPACECRAFT_WIDTH / 2;
+
+	cout << "leftPosition: " << leftPosition << ", rightPosition: " << rightPosition << endl;
+	cout << "runwayLeft: " << coordinate->getX() << ", runwayRight: " << (coordinate->getX() + Params::RUNWAY_WIDTH) << endl;
+
+	return coordinate->getX() <= leftPosition && coordinate->getX() + Params::RUNWAY_WIDTH >= rightPosition;
 }

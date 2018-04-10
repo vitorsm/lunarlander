@@ -18,7 +18,7 @@ SpacecraftController::SpacecraftController() {
 	this->speed[1] = 0;
 	this->timeLastUpdateMotor = 0;
 	this->timeLastUpdateDirection = 0;
-//	this->lastDirectionY = false;
+	this->floorController = NULL;
 
 	this->lastTime = time(0);
 }
@@ -62,6 +62,7 @@ void SpacecraftController::setRightPower() {
 }
 
 void SpacecraftController::updatePosition(FloorController *floorController) {
+	this->floorController = floorController;
 
 	long currentTime = time(0);
 	float time = (currentTime - this->lastTime);
@@ -82,18 +83,23 @@ void SpacecraftController::updatePosition(FloorController *floorController) {
 
 	this->lastTime = currentTime;
 
-	floorController->isOnTheFloor();
+	this->floorController->isOnTheFloor(this->position);
+
+	if (this->floorController->isOnTheRunway(this->position)) {
+		cout << "Esta no local" << endl;
+	}
 }
 
 void SpacecraftController::setRotate() {
 //	glTranslatef(this->position->getX(), this->position->getY(), 0);
-	glTranslatef(this->position->getX(), this->position->getY(), 0);
-	glRotatef(-10 * this->acceleration[0], 0, 0, 1);
+	float x = this->position->getX() - Params::SPACECRAFT_WIDTH / 2;
+	float y = this->position->getY();
+
+	glTranslatef(x, y, 0);
+	glRotatef(-30 * this->acceleration[0], 0, 0, 1);
 }
 
 void SpacecraftController::drawSpacecraft() {
-
-//	cout << "desenhou a nave: " << this->position->getX() << ", " << this->position->getY() << endl;
 
 	glPushMatrix();
 
