@@ -20,7 +20,8 @@ public:
 	virtual ~FloorController();
 	void drawFloor();
 	void generateFloor();
-
+	bool isOnTheFloor(Coordinate *spacecraftPosition);
+	bool isOnTheRunway(Coordinate *spacecraftPosition);
 private:
 	Floor *floor;
 	void drawTriangle(Coordinate *lastCoordinate, Coordinate *coordinate);

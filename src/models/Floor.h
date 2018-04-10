@@ -29,6 +29,7 @@ public:
 	vector<Coordinate*> *getCoordinates();
 	int getCoordinatesAmount();
 	Coordinate *getRunwayCoordinate();
+	vector<Coordinate*> *getFloorCoordinateByPosition(Coordinate *leftCoordinate, Coordinate *rightCoordinate);
 private:
 	int coordinatesAmount;
 	vector<Coordinate*> *coordinates;

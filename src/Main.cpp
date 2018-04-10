@@ -39,12 +39,19 @@ void glutInitScreen(int *argc, char **argv) {
 	glutInitContextVersion(1, 1);
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+//	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(800, 640);
 	glutInitWindowPosition(100, 40);
 
 	glutCreateWindow("Lunar Lander");
 	glutDisplayFunc(Controller::drawScene);
+
+	glutKeyboardFunc(Controller::keyboardCallback);
+	glutSpecialFunc(Controller::keyboardNotAsciiCallback);
+
+
+	glutTimerFunc(Params::UPDATE_TIME, Controller::update, 0);
 
 	setup();
 

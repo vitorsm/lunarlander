@@ -8,7 +8,6 @@
 #include "Floor.h"
 
 Floor::Floor() {
-	// TODO Auto-generated constructor stub
 	srand(time(NULL));
 	this->coordinatesAmount = 0;
 }
@@ -38,8 +37,8 @@ void Floor::generateFloor(int level) {
 	int coordinateXRunway = rand() % (Params::SCREEN_WIDTH - Params::RUNWAY_WIDTH);
 
 	cout << "coordinates amount: " << coordinatesAmount << " | countRunway: " << coordinateXRunway << endl;
-	int lastX = 0;
-	int lastY = 0;
+	float lastX = 0;
+	float lastY = 0;
 	bool isRunway = false;
 	bool runwaySelected = false;
 
@@ -48,7 +47,7 @@ void Floor::generateFloor(int level) {
 
 		// Somente se nao for o primeiro ponto a coordenada pode nao ser o zero.
 		if (i > 0 && i != coordinatesAmount) {
-			x = rand() % (Params::SCREEN_WIDTH - lastX + 1) + lastX;
+			x = rand() % (Params::SCREEN_WIDTH - (int) lastX + 1) + lastX;
 		} else if (i == coordinatesAmount) {
 			x = Params::SCREEN_WIDTH;
 		}
@@ -114,4 +113,38 @@ int Floor::getCoordinatesAmount() {
 
 Coordinate *Floor::getRunwayCoordinate() {
 	return this->runwayCoordinate;
+}
+
+vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordinate, Coordinate *rightCoordinate) {
+
+	Coordinate *firstCoordinate = NULL;
+	Coordinate *lastCoordinate = NULL;
+
+	vector<Coordinate*> *coordinatesRet = new vector<Coordinate*>;
+
+	for (int i = 0; i < this->coordinatesAmount; i++) {
+		Coordinate *coordinate = this->coordinates->at(i);
+
+		if (firstCoordinate == NULL) {
+			firstCoordinate = coordinate;
+		} else if (coordinate->getX() <= leftCoordinate->getX() && coordinate->getX() > firstCoordinate->getX()) {
+			firstCoordinate = coordinate;
+		}
+
+		if (lastCoordinate == NULL) {
+			lastCoordinate = coordinate;
+		} else if (coordinate->getX() >= rightCoordinate->getX() && coordinate->getX() < lastCoordinate->getX()) {
+			lastCoordinate = coordinate;
+		}
+	}
+
+	for (int i = 0; i < this->coordinatesAmount - 1; i++) {
+		Coordinate *coordinate = this->coordinates->at(i);
+
+		if (coordinate->getX() >= firstCoordinate->getX() && coordinate->getX() <= lastCoordinate->getX()) {
+			coordinatesRet->push_back(coordinate);
+		}
+	}
+
+	return coordinatesRet;
 }

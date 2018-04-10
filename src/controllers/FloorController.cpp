@@ -71,3 +71,29 @@ void FloorController::drawRunway() {
 
 	glEnd();
 }
+
+bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
+
+	Coordinate *leftCoordinate = new Coordinate(spacecraftPosition->getX() - Params::SPACECRAFT_WIDTH / 2,
+			spacecraftPosition->getY() - Params::SPACECRAFT_HEIGHT / 2);
+
+	Coordinate *rightCoordinate = new Coordinate(spacecraftPosition->getX() + Params::SPACECRAFT_WIDTH / 2,
+			spacecraftPosition->getY() - Params::SPACECRAFT_HEIGHT / 2);
+
+	vector<Coordinate*> *coordinates = this->floor->getFloorCoordinateByPosition(leftCoordinate, rightCoordinate);
+
+	for (int i = 0; i < coordinates->size(); i++) {
+
+		Coordinate *coordinate = coordinates->at(i);
+		cout << "Pegou: " << coordinate->getX() << ", " << coordinate->getY() << endl;
+
+	}
+
+	cout << endl;
+
+	return false;
+}
+
+bool FloorController::isOnTheRunway(Coordinate *spacecraftPosition) {
+	return false;
+}

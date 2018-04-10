@@ -9,18 +9,22 @@
 #define MODELS_COORDINATE_H_
 
 #include <iostream>
+#include "Params.h"
+
 using namespace std;
+
 
 class Coordinate {
 public:
-	Coordinate(int x, int y);
+	Coordinate(float x, float y);
 	virtual ~Coordinate();
-	int getX();
-	int getY();
+	float getX();
+	float getY();
 	void print();
+	void updateBySpeed(float *speed, long time);
 private:
-	int x;
-	int y;
+	float x;
+	float y;
 };
 
 #endif /* MODELS_COORDINATE_H_ */
