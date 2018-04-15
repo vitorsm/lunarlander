@@ -9,16 +9,19 @@
 
 FloorController::FloorController() {
 	this->floor = new Floor();
-	this->generateFloor();
+	this->generateFloor(1);
+	this->lastLevel = 1;
 }
 
 FloorController::~FloorController() {
 	// TODO Auto-generated destructor stub
 }
 
-void FloorController::generateFloor() {
-	this->floor->generateFloor(5);
-	this->floor->printAllCoordinates();
+void FloorController::generateFloor(int level) {
+	if (level != this->lastLevel) {
+		this->floor->generateFloor(level);
+		this->lastLevel = level;
+	}
 }
 
 void FloorController::drawFloor() {
@@ -84,16 +87,30 @@ bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 
 	vector<Coordinate*> *coordinates = this->floor->getFloorCoordinateByPosition(leftCoordinate, rightCoordinate);
 
-//	cout << "Qtd: " << coordinates->size() << endl;
-
-	for (int i = 0; i < coordinates->size(); i++) {
+	for (int i = 0; i < coordinates->size() - 1; i++) {
 
 		Coordinate *coordinate = coordinates->at(i);
-//		cout << "Pegou: " << coordinate->getX() << ", " << coordinate->getY() << endl;
+		Coordinate *nextCoordinate = coordinates->at(i + 1);
+
+		if (leftCoordinate->getY() <= coordinate->getY() ||
+				leftCoordinate->getY() <= nextCoordinate->getY() ||
+				rightCoordinate->getY() <= coordinate->getY() ||
+				rightCoordinate->getY() <= nextCoordinate->getY()) {
+
+			vector <Coordinate*> *coordinatesByLine = this->getBorderCoordinate(coordinate, nextCoordinate, leftCoordinate, rightCoordinate);
+
+			float leftY = this->calculateY(coordinate, nextCoordinate, coordinatesByLine->at(0)->getX());
+
+			if (leftY >= leftCoordinate->getY())
+				return true;
+
+			float rightY = this->calculateY(coordinate, nextCoordinate, coordinatesByLine->at(1)->getX());
+
+			if (rightY >= rightCoordinate->getY())
+				return true;
+		}
 
 	}
-
-	cout << endl;
 
 	return false;
 }
@@ -104,8 +121,36 @@ bool FloorController::isOnTheRunway(Coordinate *spacecraftPosition) {
 	float leftPosition = spacecraftPosition->getX() - Params::SPACECRAFT_WIDTH / 2;
 	float rightPosition = spacecraftPosition->getX() + Params::SPACECRAFT_WIDTH / 2;
 
-	cout << "leftPosition: " << leftPosition << ", rightPosition: " << rightPosition << endl;
-	cout << "runwayLeft: " << coordinate->getX() << ", runwayRight: " << (coordinate->getX() + Params::RUNWAY_WIDTH) << endl;
-
 	return coordinate->getX() <= leftPosition && coordinate->getX() + Params::RUNWAY_WIDTH >= rightPosition;
+}
+
+float FloorController::calculateY(Coordinate *c1, Coordinate *c2, float x) {
+	// y = ax + b
+	float a = (c1->getY() - c2->getY()) / (c1->getX() - c2->getX());
+	float b = c2->getY() - a * c2->getX();
+
+	return a * x + b;
+}
+
+vector<Coordinate*> *FloorController::getBorderCoordinate(Coordinate *c1, Coordinate *c2,
+		Coordinate *spacecraftLeftCoordinate, Coordinate *spacecraftRightCoordinate) {
+
+	Coordinate *leftCoordinate = NULL;
+	Coordinate *rightCoordinate= NULL;
+
+	if (spacecraftLeftCoordinate->getX() < c1->getX())
+		leftCoordinate = c1;
+	else
+		leftCoordinate = spacecraftLeftCoordinate;
+
+	if (spacecraftRightCoordinate->getX() > c2->getX())
+		rightCoordinate = c2;
+	else
+		rightCoordinate = spacecraftRightCoordinate;
+
+	vector<Coordinate*> *coordinatesRet = new vector<Coordinate*>;
+	coordinatesRet->push_back(leftCoordinate);
+	coordinatesRet->push_back(rightCoordinate);
+
+	return coordinatesRet;
 }

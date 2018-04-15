@@ -21,7 +21,8 @@ public:
 	float getX();
 	float getY();
 	void print();
-	void updateBySpeed(float *speed, long time);
+	void updateBySpeed(float *speed, long time, bool powerMotor);
+	void setMaxWidthX();
 private:
 	float x;
 	float y;

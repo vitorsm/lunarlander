@@ -10,9 +10,15 @@
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+
+#include "../models/Params.h"
 #include "FloorController.h"
 #include "SpacecraftController.h"
-#include "../models/Params.h"
+#include "HUDController.h"
+#include "MenuController.h"
+#include "PauseController.h"
+#include "LevelController.h"
+
 #include <time.h>
 
 class Controller {
@@ -23,12 +29,28 @@ public:
 	static void update(int idx);
 	static void keyboardCallback(unsigned char key, int x, int y);
 	static void keyboardNotAsciiCallback(int key, int x, int y);
+
 private:
+	static int level;
+
 	static SpacecraftController *spacecraftController;
 	static FloorController *floorController;
+	static HUDController *hudController;
+	static MenuController *menuController;
+	static PauseController *pauseController;
+	static LevelController *levelController;
+
+	static void initLevel();
+
+	static bool menu;
 	static bool powerMotor;
 	static long lastTimePowerMotor;
 	static long lastTimePowerDirection;
+	static bool pause;
+	static bool startLevel;
+	static bool gameOver;
+
+	static void clickMenu();
 //	static int updateTime;
 };
 

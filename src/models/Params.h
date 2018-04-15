@@ -24,10 +24,21 @@ public:
 	static float UNITY_PER_METER;
 	static float MAX_SPEED;
 
+	static float FIRE_SIZE;
+
+	static float TEXT_POSITION;
+	static float TEXT_INCREMENT_POSITION;
+
+	static float MENU_POSITION_X;
+	static float MENU_POSITION_Y;
+	static float MENU_INCREMENT_POSITION;
+
+	static int UPDATE_TIME;
+
 	static int MOTOR_BUTTON;
 	static int RIGHT_BUTTON;
 	static int LEFT_BUTTON;
-	static int UPDATE_TIME;
+	static int PAUSE_BUTTON;
 };
 
 #endif /* MODELS_PARAMS_H_ */

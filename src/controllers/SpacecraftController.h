@@ -8,24 +8,38 @@
 #ifndef CONTROLLERS_SPACECRAFTCONTROLLER_H_
 #define CONTROLLERS_SPACECRAFTCONTROLLER_H_
 
+#include <SOIL/SOIL.h>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "../models/Coordinate.h"
 #include "../models/Params.h"
 #include "FloorController.h"
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <time.h>
+#include "../Utils.h"
+
 
 class SpacecraftController {
 public:
-	SpacecraftController();
+	SpacecraftController(FloorController *floorController);
 	virtual ~SpacecraftController();
 	void drawSpacecraft();
-	void updatePosition(FloorController *floorController);
-	void setPowerMotor(bool power);
+	void updatePosition();
+//	void setPowerMotor(bool power);
+	void setPowerMotor();
 	void setLeftPower();
 	void setRightPower();
+	float *getAcceleration();
+	float *getSpeed();
+	Coordinate *getSpacecraftPosition();
+	void setExplosion(bool explosion);
+	int getCountExplosionImage();
+	int getAmountExplosionImage();
+	void setInitialPosition();
 private:
-//	bool lastDirectionY;
 	void setRotate();
 	long lastTime;
 	float acceleration[2]; // vetor contendo: { 0: componeneteX, 1: componentY }
@@ -34,6 +48,19 @@ private:
 	long timeLastUpdateMotor;
 	long timeLastUpdateDirection;
 	FloorController *floorController;
+
+	GLuint spacecraftTexture;
+	GLuint fireTexture[40]; // 40 posicoes no vetor pq eu já sei que existem 40 imagens de fogo
+	GLuint explosionTexture[20]; // 20 posicoes no vetor pq eu já sei que existem 20 imagens de fogo
+	void initTexture();
+
+	int amountExplosionImage;
+	int countExplosionImage;
+	bool explosion;
+
+	int amountFireImage;
+	int countFireImage;
+	bool motorPower;
 };
 
 #endif /* CONTROLLERS_SPACECRAFTCONTROLLER_H_ */

@@ -7,27 +7,109 @@
 
 #include "SpacecraftController.h"
 
-SpacecraftController::SpacecraftController() {
+SpacecraftController::SpacecraftController(FloorController *floorController) {
 	// TODO Auto-generated constructor stub
 //	this->position = new Coordinate(0, Params::SCREEN_HEIGHT);
 	this->position = new Coordinate(Params::SCREEN_WIDTH / 2, Params::SCREEN_HEIGHT);
-//	this->acceleration = Params::INITIAL_ACCELERATION;
 	this->acceleration[0] = 0;
 	this->acceleration[1] = Params::INITIAL_ACCELERATION;
 	this->speed[0] = 0;
 	this->speed[1] = 0;
 	this->timeLastUpdateMotor = 0;
 	this->timeLastUpdateDirection = 0;
-	this->floorController = NULL;
+	this->floorController = floorController;
+
+	srand(time(NULL));
 
 	this->lastTime = time(0);
+
+	// pq eu já sei que tem 40 imagens de fogo
+	this->amountFireImage = 40;
+	this->countFireImage = 0;
+	this->motorPower = false;
+
+	// pq eu já sei que tem 20 imagens de explosao
+	this->amountExplosionImage = 20;
+	this->countExplosionImage = 0;
+	this->explosion = false;
+
 }
 
 SpacecraftController::~SpacecraftController() {
 	// TODO Auto-generated destructor stub
 }
 
+int SpacecraftController::getAmountExplosionImage() {
+	return this->amountExplosionImage;
+}
+int SpacecraftController::getCountExplosionImage() {
+	return this->countExplosionImage;
+}
+
+void SpacecraftController::setInitialPosition() {
+	this->countExplosionImage = 0;
+	this->explosion = false;
+
+	float initX = rand() % (Params::SCREEN_WIDTH);
+
+	this->position = new Coordinate(initX, Params::SCREEN_HEIGHT);
+	this->acceleration[0] = 0;
+	this->acceleration[1] = Params::INITIAL_ACCELERATION;
+	this->speed[0] = 0;
+	this->speed[1] = 0;
+}
+
+void SpacecraftController::initTexture() {
+
+	// Pegando a textura da nave
+	this->spacecraftTexture = SOIL_load_OGL_texture(
+			"src/resources/spacecraft.png",
+			SOIL_LOAD_AUTO,
+			SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_INVERT_Y
+	);
+
+	if (this->spacecraftTexture == 0) {
+		cout << "Algo de errado não está certo com a textura: " << endl << SOIL_last_result() << endl;
+	}
+
+	// Pegando a textura do fogo
+	for (int i = 0; i < this->amountFireImage; i++) {
+		char *str = Utils::concatValue("src/resources/fire/fire_1f_40_", (i + 1));
+		str = Utils::concatChar(str, ".png");
+
+		this->fireTexture[i] = SOIL_load_OGL_texture(
+				str,
+				SOIL_LOAD_AUTO,
+				SOIL_CREATE_NEW_ID,
+				SOIL_FLAG_INVERT_Y
+		);
+
+		if (this->fireTexture[i] == 0) {
+			cout << "Algo de errado não está certo com a textura: " << endl << SOIL_last_result() << endl;
+		}
+	}
+
+	// Pegando a textura da explosao
+	for (int i = 0; i < this->amountExplosionImage; i++) {
+		char *str = Utils::concatValue("src/resources/explosion/bubble_explo", (i + 1));
+		str = Utils::concatChar(str, ".png");
+
+		this->explosionTexture[i] = SOIL_load_OGL_texture(
+				str,
+				SOIL_LOAD_AUTO,
+				SOIL_CREATE_NEW_ID,
+				SOIL_FLAG_INVERT_Y
+		);
+
+		if (this->explosionTexture[i] == 0) {
+			cout << "Algo de errado não está certo com a textura: " << endl << SOIL_last_result() << endl;
+		}
+	}
+}
+
 void SpacecraftController::setPowerMotor(bool power) {
+	this->motorPower = power;
 	this->acceleration[1] = power ? Params::POWER_ACCELERATION : Params::INITIAL_ACCELERATION;
 }
 
@@ -61,32 +143,51 @@ void SpacecraftController::setRightPower() {
 	this->timeLastUpdateMotor = time(0);
 }
 
-void SpacecraftController::updatePosition(FloorController *floorController) {
-	this->floorController = floorController;
+void SpacecraftController::updatePosition() {
 
-	long currentTime = time(0);
-	float time = (currentTime - this->lastTime);
+	if (!this->explosion) {
+		long currentTime = time(0);
+		float time = (currentTime - this->lastTime);
 
-	float newSpeed = acceleration[0] * Params::UNITY_PER_METER;
-	if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
-		speed[0] = newSpeed;
+		float newSpeed = acceleration[0] * Params::UNITY_PER_METER;
+		if (newSpeed <= 3 * Params::MAX_SPEED && newSpeed >= -3 * Params::MAX_SPEED)
+			speed[0] = newSpeed;
 
-	if (this->acceleration[1] < 0 && this->speed[1] > 0) {
-		speed[1] = 0;
+		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
+			speed[1] = 0;
+		}
+
+		newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
+	//	if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
+	//		speed[1] = newSpeed;
+
+		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
+			speed[1] = 0;
+		} else {
+//			if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
+				speed[1] = newSpeed;
+		}
+
+		this->position->updateBySpeed(speed, time, acceleration[1] > 0);
+
+		this->lastTime = currentTime;
 	}
 
-	newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
-	if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
-		speed[1] = newSpeed;
 
-	this->position->updateBySpeed(speed, time);
+	if (this->motorPower) {
+		this->countFireImage++;
+		if (this->countFireImage >= this->amountFireImage) {
+			this->countFireImage = 0;
+		}
+	} else {
+		this->countFireImage = 0;
+	}
 
-	this->lastTime = currentTime;
+	if (this->explosion) {
 
-	this->floorController->isOnTheFloor(this->position);
-
-	if (this->floorController->isOnTheRunway(this->position)) {
-		cout << "Esta no local" << endl;
+		if (this->countExplosionImage + 1 <= this->amountExplosionImage) {
+			this->countExplosionImage++;
+		}
 	}
 }
 
@@ -100,27 +201,75 @@ void SpacecraftController::setRotate() {
 }
 
 void SpacecraftController::drawSpacecraft() {
+	if (this->spacecraftTexture == NULL) {
+		this->initTexture();
+	}
 
 	glPushMatrix();
 
 	this->setRotate();
-	float x = this->position->getX() - Params::SPACECRAFT_WIDTH / 2;
-	float y = this->position->getY() - Params::SPACECRAFT_HEIGHT / 2;
 
-	glColor3f(0, 0, 0);
+	if (!this->explosion || this->countExplosionImage < 6) {
+		float x = this->position->getX() - Params::SPACECRAFT_WIDTH / 2;
+		float y = this->position->getY() - Params::SPACECRAFT_HEIGHT / 2;
 
-//	glBegin(GL_POLYGON);
-//		glVertex3f(x, y, 0);
-//		glVertex3f(x + Params::SPACECRAFT_WIDTH, y, 0);
-//		glVertex3f(x + Params::SPACECRAFT_WIDTH, y + Params::SPACECRAFT_HEIGHT, 0);
-//		glVertex3f(x, y + Params::SPACECRAFT_HEIGHT, 0);
-//	glEnd();
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1, 1, 1, 1);
+		glBindTexture(GL_TEXTURE_2D, this->spacecraftTexture);
+		glBegin(GL_POLYGON);
+			glTexCoord2f(0,0); 	glVertex3f(0, 0, 0);
+			glTexCoord2f(1, 0);	glVertex3f(Params::SPACECRAFT_WIDTH, 0, 0);
+			glTexCoord2f(1, 1);	glVertex3f(Params::SPACECRAFT_WIDTH, Params::SPACECRAFT_HEIGHT, 0);
+			glTexCoord2f(0, 1);	glVertex3f(0, Params::SPACECRAFT_HEIGHT, 0);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
 
-	glBegin(GL_POLYGON);
-		glVertex3f(0, 0, 0);
-		glVertex3f(Params::SPACECRAFT_WIDTH, 0, 0);
-		glVertex3f(Params::SPACECRAFT_WIDTH, Params::SPACECRAFT_HEIGHT, 0);
-		glVertex3f(0, Params::SPACECRAFT_HEIGHT, 0);
-	glEnd();
+	if (this->explosion) {
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1, 1, 1, 1);
+		glBindTexture(GL_TEXTURE_2D, this->explosionTexture[this->countExplosionImage]);
+		glBegin(GL_POLYGON);
+			glTexCoord2f(0,0); 	glVertex3f(0, 0, 0);
+			glTexCoord2f(1, 0);	glVertex3f(Params::SPACECRAFT_WIDTH, 0, 0);
+			glTexCoord2f(1, 1);	glVertex3f(Params::SPACECRAFT_WIDTH, Params::SPACECRAFT_HEIGHT, 0);
+			glTexCoord2f(0, 1);	glVertex3f(0, Params::SPACECRAFT_HEIGHT, 0);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
+
+	if (this->motorPower && !this->explosion) {
+		// Desenhar fogo
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1, 1, 1, 1);
+		glBindTexture(GL_TEXTURE_2D, this->fireTexture[this->countFireImage]);
+		glBegin(GL_POLYGON);
+			glTexCoord2f(0,0); 	glVertex3f(0, 0, 0);
+			glTexCoord2f(1, 0);	glVertex3f(Params::SPACECRAFT_WIDTH, 0, 0);
+			glTexCoord2f(1, 1);	glVertex3f(Params::SPACECRAFT_WIDTH, -Params::FIRE_SIZE, 0);
+			glTexCoord2f(0, 1);	glVertex3f(0, -Params::FIRE_SIZE, 0);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
 	glPopMatrix();
+}
+
+float *SpacecraftController::getAcceleration() {
+	return this->acceleration;
+}
+
+float *SpacecraftController::getSpeed() {
+	return this->speed;
+}
+
+Coordinate *SpacecraftController::getSpacecraftPosition() {
+	return this->position;
+}
+
+void SpacecraftController::setExplosion(bool explosion) {
+	this->explosion = explosion;
+	this->countExplosionImage = 0;
 }

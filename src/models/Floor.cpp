@@ -26,6 +26,9 @@ void Floor::printAllCoordinates() {
 }
 
 void Floor::generateFloor(int level) {
+	this->runwayCoordinate = NULL;
+	this->coordinatesAmount = 0;
+
 	// somando + 1 para colocar a ultima coordenada, para fechar a parada
 	int coordinatesAmount = level * coefficientVariation + 1;
 	int variationHeight = level * coefficientVariation * 2;
@@ -121,12 +124,16 @@ vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordin
 
 //	printAllCoordinates();
 
+	if (rightCoordinate->getX() >= Params::SCREEN_WIDTH) {
+		rightCoordinate->setMaxWidthX();
+	}
+
 	Coordinate *firstCoordinate = NULL;
 	Coordinate *lastCoordinate = NULL;
 
 	vector<Coordinate*> *coordinatesRet = new vector<Coordinate*>;
 
-	for (int i = 0; i < this->coordinatesAmount; i++) {
+	for (int i = 0; i < this->coordinatesAmount - 1; i++) {
 		Coordinate *coordinate = this->coordinates->at(i);
 
 		if (firstCoordinate == NULL) {

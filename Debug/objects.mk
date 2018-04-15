@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lglut -lGLU -lGL -lGLEW
+LIBS := -lSOIL -lglut -lGLU -lGL -lGLEW
 

@@ -29,12 +29,19 @@ void Coordinate::print() {
 	cout << "(" << this->x << ", " << this->y << ")";
 }
 
-void Coordinate::updateBySpeed(float *speed, long time) {
+void Coordinate::updateBySpeed(float *speed, long time, bool powerMotor) {
 
-	if (this->x + speed[0] >= 0 && this->x + speed[0] <= Params::SCREEN_WIDTH)
+//	if (powerMotor && (this->x + speed[0] >= 0 && this->x + speed[0] <= Params::SCREEN_WIDTH))
+//		this->x += speed[0];
+
+	if ((this->x + speed[0] >= 0 && this->x + speed[0] <= Params::SCREEN_WIDTH))
 		this->x += speed[0];
 
 	if (this->y + speed[1] >= 0 && this->y + speed[1] <= Params::SCREEN_HEIGHT)
 		this->y += speed[1];
 
+}
+
+void Coordinate::setMaxWidthX() {
+	this->x = Params::SCREEN_WIDTH - 1;
 }

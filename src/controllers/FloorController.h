@@ -19,13 +19,16 @@ public:
 	FloorController();
 	virtual ~FloorController();
 	void drawFloor();
-	void generateFloor();
+	void generateFloor(int level);
 	bool isOnTheFloor(Coordinate *spacecraftPosition);
 	bool isOnTheRunway(Coordinate *spacecraftPosition);
 private:
+	int lastLevel;
 	Floor *floor;
 	void drawTriangle(Coordinate *lastCoordinate, Coordinate *coordinate);
 	void drawRunway();
+	float calculateY(Coordinate *c1, Coordinate *c2, float x);
+	vector<Coordinate*> *getBorderCoordinate(Coordinate *c1, Coordinate *c2, Coordinate *spacecraftLeftCoordinate, Coordinate *spacecraftRightCoordinate);
 };
 
 #endif /* CONTROLLERS_FLOORCONTROLLER_H_ */

@@ -26,12 +26,20 @@ float Params::INITIAL_ACCELERATION = -0.0580665;
 float Params::POWER_ACCELERATION = 0.0580665;
 float Params::POWER_DIRECTION_ACCELERATION = 0.13;
 float Params::UNITY_PER_METER = 1;
+float Params::FIRE_SIZE = 12;
 
+float Params::TEXT_POSITION = 95;
+float Params::TEXT_INCREMENT_POSITION = 2;
+
+float Params::MENU_POSITION_X = 35;
+float Params::MENU_POSITION_Y = 50;
+float Params::MENU_INCREMENT_POSITION = 8;
 
 float Params::MAX_SPEED = 0.5;
 
 int Params::MOTOR_BUTTON = 32;
 int Params::RIGHT_BUTTON = 102;
 int Params::LEFT_BUTTON = 100;
+int Params::PAUSE_BUTTON = 'p';
 
 int Params::UPDATE_TIME = 20;
