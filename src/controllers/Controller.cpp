@@ -13,6 +13,8 @@ const int MOTOR_BUTTON = 32;
 const int ESC_BUTTON = 27;
 const int PAUSE_BUTTON = 'p';
 const int ENTER_BUTTON = 13;
+const int EXIT_BUTTON = 27;
+const int RESTART_BUTTON = 'r';
 
 bool Controller::powerMotor = false;
 long Controller::lastTimePowerMotor = 0;
@@ -33,6 +35,7 @@ HUDController 			*Controller::hudController = new HUDController();
 PauseController			*Controller::pauseController = new PauseController();
 LevelController			*Controller::levelController = new LevelController();
 InstructionsController	*Controller::instructionsController = new InstructionsController();
+ConfirmController		*Controller::confirmController = new ConfirmController();
 
 int Controller::level = 1;
 
@@ -44,6 +47,8 @@ bool Controller::menu = true;
 bool Controller::startLevel = false;
 bool Controller::gameOver = false;
 bool Controller::instructions = false;
+bool Controller::restart = false;
+bool Controller::exitGame = false;
 
 void Controller::keyboardNotAsciiCallback(int key, int x, int y) {
 
@@ -59,15 +64,18 @@ void Controller::keyboardNotAsciiCallback(int key, int x, int y) {
 		lastTimePowerDirection = time(0);
 		break;
 	case GLUT_KEY_UP:
-//		spacecraftController->setPowerMotor();
-		menuController->setUpMenu();
-		levelController->setUpMenu();
-		pauseController->setUpMenu();
+		powerMotor = true;
+		lastTimePowerMotor = time(0);
+		if (restart || exitGame) confirmController->setUpMenu();
+		if (menu) menuController->setUpMenu();
+		if (startLevel) levelController->setUpMenu();
+		if (pause) pauseController->setUpMenu();
 		break;
 	case GLUT_KEY_DOWN:
-		menuController->setDownMenu();
-		levelController->setDownMenu();
-		pauseController->setDownMenu();
+		if (restart || exitGame) confirmController->setDownMenu();
+		if (menu) menuController->setDownMenu();
+		if (startLevel)levelController->setDownMenu();
+		if (pause) pauseController->setDownMenu();
 		break;
 	default:
 		break;
@@ -79,9 +87,6 @@ void Controller::keyboardCallback(unsigned char key, int x, int y) {
 	int value = key;
 
 	switch(key) {
-	case ESC_BUTTON:
-		cout << "apertou esc" << endl;
-		break;
 	case MOTOR_BUTTON:
 		powerMotor = true;
 		lastTimePowerMotor = time(0);
@@ -92,6 +97,14 @@ void Controller::keyboardCallback(unsigned char key, int x, int y) {
 		break;
 	case ENTER_BUTTON:
 		clickMenu();
+		break;
+	case RESTART_BUTTON:
+		restart = true;
+		confirmController->setMessage("Deseja reiniciar o jogo");
+		break;
+	case EXIT_BUTTON:
+		exitGame = true;
+		confirmController->setMessage("Deseja sair do jogo");
 		break;
 	default:
 		break;
@@ -113,11 +126,14 @@ void Controller::drawScene() {
 		floorController->drawFloor();
 		hudController->drawHUD();
 
-		if (startLevel) {
+		if (restart || exitGame) {
+			confirmController->drawConfirm();
+		} else if (startLevel) {
 			levelController->drawLevel();
 		} else if (pause) {
 			pauseController->drawPause();
 		}
+
 	}
 
 
@@ -129,10 +145,9 @@ void Controller::update(int idx) {
 	if (menu) {
 
 	} else {
-		if (!pause && !startLevel) {
+		if (!pause && !startLevel && !restart && !exitGame) {
 //			cout << "power motor: " << powerMotor << endl;
 			if (time(0) != lastTimePowerMotor) {
-				if (powerMotor) cout << "soltou" << endl;
 				powerMotor = false;
 			}
 
@@ -144,10 +159,14 @@ void Controller::update(int idx) {
 			hudController->updateData(speed[1], spacecraftController->getSpacecraftPosition()->getY(),
 					speed[0], lifes, level, spacecraftController->getFuel());
 
+			levelController->setMaxSpeed(speed[1] < Params::MAX_SPEED_LANDER,
+										speed[0] < -Params::MAX_ROTATION_LANDER || speed[0] > Params::MAX_ROTATION_LANDER);
+
 			Coordinate *spacecraftPosition = spacecraftController->getSpacecraftPosition();
 			if (floorController->isOnTheFloor(spacecraftPosition)) {
-				if (floorController->isOnTheRunway(spacecraftPosition)) {
-					// chama a funcao q ganha a fase
+				if (floorController->isOnTheRunway(spacecraftPosition) &&
+						(speed[0] > -Params::MAX_ROTATION_LANDER && speed[0] < Params::MAX_ROTATION_LANDER &&
+								speed[1] > Params::MAX_SPEED_LANDER)) {
 					level++;
 					calculateScore();
 					floorController->generateFloor(level);
@@ -156,10 +175,10 @@ void Controller::update(int idx) {
 				} else {
 					if (!gameOver) {
 						// chama a funcao q perde
+						lifes--;
 						spacecraftController->setExplosion(true);
 						levelController->setLastLevel(lifes);
 						gameOver = true;
-						lifes--;
 					} else {
 //						cout << spacecraftController->getCountExplosionImage() << " >= " << spacecraftController->getAmountExplosionImage();
 						if (spacecraftController->getCountExplosionImage() >= spacecraftController->getAmountExplosionImage()) {
@@ -169,8 +188,10 @@ void Controller::update(int idx) {
 						}
 
 					}
-
 				}
+
+
+
 			}
 		}
 	}
@@ -197,15 +218,26 @@ void Controller::clickMenu() {
 			instructions = true;
 			menu = false;
 		} else if (selected == MenuController::EXIT_MENU_ITEM) {
+			cout << "vai fechar o jogo" << endl;
 			exit(0);
 		}
+	} else if (restart) {
+		restart = false;
+		if (confirmController->getSelectedMenu() == ConfirmController::YES_MENU_ITEM)
+			initLevel();
+	} else if (exitGame) {
+		exitGame = false;
+		if (confirmController->getSelectedMenu() == ConfirmController::YES_MENU_ITEM)
+			cout << "vai fechar o jogo" << endl;
+			exit(0);
 	} else if (startLevel) {
 		selected = levelController->getSelectedMenu();
-		cout << "startLevel = " << selected << endl;
 
 		if (selected == LevelController::CONTINUE_MENU_ITEM) {
-			initLevel();
+//			lifes = Params::INITIAL_LIFES;
+//			level = 1;
 			startLevel = false;
+			initLevel();
 		} else if (selected == LevelController::MENU_MENU_ITEM) {
 			startLevel = false;
 			menu = true;
@@ -237,8 +269,9 @@ void Controller::initLevel() {
 
 void Controller::calculateScore() {
 	float score = level * 3;
-	score += Params::INITIAL_FUEL / spacecraftController->getSpentFuel();
-
+	if (spacecraftController->getSpentFuel() > 0) {
+		score += Params::INITIAL_FUEL / spacecraftController->getSpentFuel();
+	}
 	float rotation = spacecraftController->getSpeed()[0];
 	if (rotation < 0) rotation = -rotation;
 

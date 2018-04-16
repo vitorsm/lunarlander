@@ -20,6 +20,7 @@
 #include "LevelController.h"
 #include "BackgroundController.h"
 #include "InstructionsController.h"
+#include "ConfirmController.h"
 
 #include <time.h>
 
@@ -39,6 +40,7 @@ private:
 
 	static void calculateScore();
 
+	static ConfirmController *confirmController;
 	static BackgroundController *backgroundController;
 	static SpacecraftController *spacecraftController;
 	static FloorController *floorController;
@@ -58,6 +60,8 @@ private:
 	static bool pause;
 	static bool startLevel;
 	static bool gameOver;
+	static bool restart;
+	static bool exitGame;
 
 	static void clickMenu();
 //	static int updateTime;

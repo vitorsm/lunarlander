@@ -25,6 +25,9 @@ public:
 	static float UNITY_PER_METER;
 	static float MAX_SPEED;
 
+	static float MAX_SPEED_LANDER;
+	static float MAX_ROTATION_LANDER;
+
 	static float LIFES_SIZE;
 
 	static int INITIAL_FUEL;

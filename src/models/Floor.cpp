@@ -33,10 +33,8 @@ void Floor::generateFloor(int level) {
 	int coordinatesAmount = level * coefficientVariation + 1;
 	int variationHeight = level * coefficientVariation * 2;
 
-//	this->coordinatesAmount = coordinatesAmount;
 	this->coordinates = new vector<Coordinate*>;
 
-//	int countRunway = rand() % (coordinatesAmount/2);
 	int coordinateXRunway = rand() % (Params::SCREEN_WIDTH - Params::RUNWAY_WIDTH);
 
 	float lastX = 0;
@@ -71,7 +69,6 @@ void Floor::generateFloor(int level) {
 			if (x + Params::RUNWAY_WIDTH > Params::SCREEN_WIDTH) {
 				x -= (x + Params::RUNWAY_WIDTH) - Params::SCREEN_WIDTH;
 			}
-//			cout << "x = " << x << " e gerou runway" << endl;
 			this->runwayCoordinate = new Coordinate(x, y);
 			lastX = x + Params::RUNWAY_WIDTH;
 			isRunway = true;
@@ -89,8 +86,6 @@ void Floor::generateFloor(int level) {
 		if (x >= Params::SCREEN_WIDTH)
 			break;
 	}
-
-	cout << "coordinates amount: " << this->coordinatesAmount << endl;
 
 	this->closePolygon();
 
@@ -120,10 +115,6 @@ Coordinate *Floor::getRunwayCoordinate() {
 
 vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordinate, Coordinate *rightCoordinate) {
 
-//	cout << "leftCoordinate: " << leftCoordinate->getX() << ", rightCoordinate: " << rightCoordinate->getX() << endl;
-
-//	printAllCoordinates();
-
 	if (rightCoordinate->getX() >= Params::SCREEN_WIDTH) {
 		rightCoordinate->setMaxWidthX();
 	}
@@ -150,8 +141,6 @@ vector<Coordinate*> *Floor::getFloorCoordinateByPosition(Coordinate *leftCoordin
 			lastCoordinate = coordinate;
 		}
 	}
-
-//	cout << "first: " << firstCoordinate->getX() << ", last: " << lastCoordinate->getX() << endl;
 
 	for (int i = 0; i < this->coordinatesAmount - 1; i++) {
 		Coordinate *coordinate = this->coordinates->at(i);

@@ -19,7 +19,7 @@ Params::~Params() {
 int Params::LEVEL_MAX = 10;
 int Params::SCREEN_WIDTH = 100;
 int Params::SCREEN_HEIGHT = 100;
-int Params::RUNWAY_WIDTH = 10;
+int Params::RUNWAY_WIDTH = 20;
 int Params::SPACECRAFT_WIDTH = 8;
 int Params::SPACECRAFT_HEIGHT = 12;
 int Params::ALPHA_HEIGHT = 5;
@@ -28,6 +28,9 @@ float Params::POWER_ACCELERATION = 0.00580665;
 float Params::POWER_DIRECTION_ACCELERATION = 0.13;
 float Params::UNITY_PER_METER = 1;
 float Params::FIRE_SIZE = 12;
+
+float Params::MAX_SPEED_LANDER = -0.4;
+float Params::MAX_ROTATION_LANDER = 0.1;
 
 int Params::INITIAL_FUEL = 400;
 int Params::MINIMUM_FUEL = 80;

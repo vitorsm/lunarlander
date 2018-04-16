@@ -33,6 +33,8 @@ public:
 	void setDownMenu();
 	int getSelectedMenu();
 
+	void setMaxSpeed(bool maxSpeed, bool maxRotation);
+
 	static int CONTINUE_MENU_ITEM;
 	static int MENU_MENU_ITEM;
 private:
@@ -40,6 +42,9 @@ private:
 	int level;
 	int lastLevel;
 	void drawText(void *font, char *s);
+
+	bool maxSpeed;
+	bool maxRotation;
 
 	int score;
 	int completeScore;

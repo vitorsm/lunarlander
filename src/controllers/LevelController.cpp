@@ -13,6 +13,8 @@ LevelController::LevelController() {
 	this->lastLevel = 1;
 	this->countMenu = CONTINUE_MENU_ITEM;
 	this->lifes = 3;
+	this->maxRotation = false;
+	this->maxSpeed = false;
 }
 
 LevelController::~LevelController() {
@@ -21,6 +23,11 @@ LevelController::~LevelController() {
 
 int LevelController::CONTINUE_MENU_ITEM = 1;
 int LevelController::MENU_MENU_ITEM = 2;
+
+void LevelController::setMaxSpeed(bool maxSpeed, bool maxRotation) {
+	this->maxRotation = maxRotation;
+	this->maxSpeed = maxSpeed;
+}
 
 void LevelController::setScores(int score, int completeScore) {
 	this->score = score;
@@ -79,6 +86,19 @@ void LevelController::drawLevel() {
 		glRasterPos2i(Params::MENU_POSITION_X, Params::MENU_POSITION_Y + 18);
 		if (this->level == this->lastLevel) {
 			drawText(GLUT_BITMAP_TIMES_ROMAN_24, "Voce morreu");
+			int dif = 0;
+			if (this->maxSpeed) {
+				dif += 2;
+				glRasterPos2i(Params::MENU_POSITION_X, Params::MENU_POSITION_Y + 18 - dif);
+				drawText(GLUT_BITMAP_TIMES_ROMAN_24, "Voce estava muito rapido");
+			}
+
+			if (this->maxRotation) {
+				dif += 2;
+				glRasterPos2i(Params::MENU_POSITION_X, Params::MENU_POSITION_Y + 18 - dif);
+				drawText(GLUT_BITMAP_TIMES_ROMAN_24, "A nave estava muito torta");
+			}
+
 		} else {
 			drawText(GLUT_BITMAP_TIMES_ROMAN_24, Utils::concatChar(Utils::concatValue("Voce passou de fase!! Voce fez: ", this->score), " pontos"));
 		}

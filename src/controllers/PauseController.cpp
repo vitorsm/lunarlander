@@ -40,6 +40,7 @@ void PauseController::drawPause() {
 
 void PauseController::drawMenuItem() {
 
+	glColor3f(1, 1, 1);
 	glRasterPos2i(Params::MENU_POSITION_X - 10, Params::MENU_POSITION_Y + 15);
 	drawText(GLUT_BITMAP_TIMES_ROMAN_24, "Jogo pausado - Pressione p para voltar ao jogo");
 

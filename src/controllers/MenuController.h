@@ -35,9 +35,9 @@ public:
 private:
 	void drawMenuItem();
 	void drawText(void *font, char *s);
+	int coutMenu;
 	GLuint backgroundTexture;
 	void initBackground();
-	int coutMenu;
 };
 
 #endif /* CONTROLLERS_MENUCONTROLLER_H_ */
