@@ -18,7 +18,7 @@ using namespace std;
 #include <iostream>
 
 
-const int coefficientVariation = 3;
+const int coefficientVariation = 8;
 
 class Floor {
 public:

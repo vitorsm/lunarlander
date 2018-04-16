@@ -39,7 +39,6 @@ void Floor::generateFloor(int level) {
 //	int countRunway = rand() % (coordinatesAmount/2);
 	int coordinateXRunway = rand() % (Params::SCREEN_WIDTH - Params::RUNWAY_WIDTH);
 
-	cout << "coordinates amount: " << coordinatesAmount << " | countRunway: " << coordinateXRunway << endl;
 	float lastX = 0;
 	float lastY = 0;
 	bool isRunway = false;
@@ -66,12 +65,13 @@ void Floor::generateFloor(int level) {
 
 		y += lastY;
 		if (y < 0) y = 0;
+		if (y > 64) y = 64;
 
 		if (x >= coordinateXRunway && !runwaySelected) {
 			if (x + Params::RUNWAY_WIDTH > Params::SCREEN_WIDTH) {
 				x -= (x + Params::RUNWAY_WIDTH) - Params::SCREEN_WIDTH;
 			}
-			cout << "x = " << x << " e gerou runway" << endl;
+//			cout << "x = " << x << " e gerou runway" << endl;
 			this->runwayCoordinate = new Coordinate(x, y);
 			lastX = x + Params::RUNWAY_WIDTH;
 			isRunway = true;

@@ -25,19 +25,25 @@ Controller::~Controller() {
 	// TODO Auto-generated destructor stub
 }
 
+BackgroundController	*Controller::backgroundController = new BackgroundController();
 MenuController 			*Controller::menuController = new MenuController();
 FloorController 		*Controller::floorController = new FloorController();
 SpacecraftController 	*Controller::spacecraftController = new SpacecraftController(floorController);
 HUDController 			*Controller::hudController = new HUDController();
 PauseController			*Controller::pauseController = new PauseController();
 LevelController			*Controller::levelController = new LevelController();
+InstructionsController	*Controller::instructionsController = new InstructionsController();
 
 int Controller::level = 1;
+
+int Controller::lifes = Params::INITIAL_LIFES;
+int Controller::scores = 0;
 
 bool Controller::pause = false;
 bool Controller::menu = true;
 bool Controller::startLevel = false;
 bool Controller::gameOver = false;
+bool Controller::instructions = false;
 
 void Controller::keyboardNotAsciiCallback(int key, int x, int y) {
 
@@ -53,6 +59,7 @@ void Controller::keyboardNotAsciiCallback(int key, int x, int y) {
 		lastTimePowerDirection = time(0);
 		break;
 	case GLUT_KEY_UP:
+//		spacecraftController->setPowerMotor();
 		menuController->setUpMenu();
 		levelController->setUpMenu();
 		pauseController->setUpMenu();
@@ -76,9 +83,9 @@ void Controller::keyboardCallback(unsigned char key, int x, int y) {
 		cout << "apertou esc" << endl;
 		break;
 	case MOTOR_BUTTON:
-//		powerMotor = true;
-//		lastTimePowerMotor = time(0);
-		spacecraftController->setPowerMotor();
+		powerMotor = true;
+		lastTimePowerMotor = time(0);
+//		spacecraftController->setPowerMotor();
 		break;
 	case PAUSE_BUTTON:
 		pause = !pause;
@@ -93,11 +100,15 @@ void Controller::keyboardCallback(unsigned char key, int x, int y) {
 
 void Controller::drawScene() {
 
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	if (menu) {
 		menuController->drawMenu();
+	} else if (instructions) {
+		instructionsController->drawInstructions();
 	} else {
-		glClear(GL_COLOR_BUFFER_BIT);
 
+		backgroundController->drawBackground();
 		spacecraftController->drawSpacecraft();
 		floorController->drawFloor();
 		hudController->drawHUD();
@@ -119,21 +130,26 @@ void Controller::update(int idx) {
 
 	} else {
 		if (!pause && !startLevel) {
+//			cout << "power motor: " << powerMotor << endl;
 			if (time(0) != lastTimePowerMotor) {
+				if (powerMotor) cout << "soltou" << endl;
 				powerMotor = false;
 			}
+
 
 			spacecraftController->setPowerMotor(powerMotor);
 			spacecraftController->updatePosition();
 
 			float *speed = spacecraftController->getSpeed();
-			hudController->updateData(speed[1], spacecraftController->getSpacecraftPosition()->getY(), speed[0]);
+			hudController->updateData(speed[1], spacecraftController->getSpacecraftPosition()->getY(),
+					speed[0], lifes, level, spacecraftController->getFuel());
 
 			Coordinate *spacecraftPosition = spacecraftController->getSpacecraftPosition();
 			if (floorController->isOnTheFloor(spacecraftPosition)) {
 				if (floorController->isOnTheRunway(spacecraftPosition)) {
 					// chama a funcao q ganha a fase
 					level++;
+					calculateScore();
 					floorController->generateFloor(level);
 					levelController->setLevel(level);
 					startLevel = true;
@@ -141,8 +157,9 @@ void Controller::update(int idx) {
 					if (!gameOver) {
 						// chama a funcao q perde
 						spacecraftController->setExplosion(true);
-						levelController->setLastLevel();
+						levelController->setLastLevel(lifes);
 						gameOver = true;
+						lifes--;
 					} else {
 //						cout << spacecraftController->getCountExplosionImage() << " >= " << spacecraftController->getAmountExplosionImage();
 						if (spacecraftController->getCountExplosionImage() >= spacecraftController->getAmountExplosionImage()) {
@@ -171,11 +188,14 @@ void Controller::clickMenu() {
 		selected = menuController->getSelectedMenu();
 
 		if (selected == MenuController::START_GAME_MENU_ITEM) {
+			level = 1;
+			lifes = Params::INITIAL_LIFES;
 			initLevel();
 			menu = false;
 			cout << "clicou no start game" << endl;
 		} else if (selected == MenuController::INSTRUCTION_MENU_ITEM) {
-
+			instructions = true;
+			menu = false;
 		} else if (selected == MenuController::EXIT_MENU_ITEM) {
 			exit(0);
 		}
@@ -202,12 +222,28 @@ void Controller::clickMenu() {
 			menu = true;
 			pause = false;
 		}
+	} else if (instructions) {
+		menu = true;
+		instructions = false;
 	}
 
 }
 
 void Controller::initLevel() {
-	cout << "dentro da funcao" << endl;
 	floorController->generateFloor(level);
 	spacecraftController->setInitialPosition();
+	spacecraftController->setInitialFuel(level);
+}
+
+void Controller::calculateScore() {
+	float score = level * 3;
+	score += Params::INITIAL_FUEL / spacecraftController->getSpentFuel();
+
+	float rotation = spacecraftController->getSpeed()[0];
+	if (rotation < 0) rotation = -rotation;
+
+	score -= 3 * rotation;
+
+	scores += score;
+	levelController->setScores(score, scores);
 }

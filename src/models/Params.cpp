@@ -22,11 +22,17 @@ int Params::SCREEN_HEIGHT = 100;
 int Params::RUNWAY_WIDTH = 10;
 int Params::SPACECRAFT_WIDTH = 8;
 int Params::SPACECRAFT_HEIGHT = 12;
-float Params::INITIAL_ACCELERATION = -0.0580665;
-float Params::POWER_ACCELERATION = 0.0580665;
+int Params::ALPHA_HEIGHT = 5;
+float Params::INITIAL_ACCELERATION = -0.00580665;
+float Params::POWER_ACCELERATION = 0.00580665;
 float Params::POWER_DIRECTION_ACCELERATION = 0.13;
 float Params::UNITY_PER_METER = 1;
 float Params::FIRE_SIZE = 12;
+
+int Params::INITIAL_FUEL = 400;
+int Params::MINIMUM_FUEL = 80;
+float Params::LIFES_SIZE = 1.5;
+int Params::INITIAL_LIFES = 3;
 
 float Params::TEXT_POSITION = 95;
 float Params::TEXT_INCREMENT_POSITION = 2;

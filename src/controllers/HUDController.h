@@ -27,12 +27,17 @@ public:
 	virtual ~HUDController();
 	void drawHUD();
 
-	void updateData(float speed, float height, float rotation);
+	void updateData(float speed, float height, float rotation, int lifes, int level, int fuel);
 private:
 	GLuint fontOffset;
 	float speed;
 	float height;
 	float rotation;
+	int lifes;
+	int level;
+	int fuel;
+
+	void drawLifes(float x, float y);
 //	char *concatValue(char *str, float value);
 
 	void drawText(void *font, char *text);

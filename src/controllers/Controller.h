@@ -18,6 +18,8 @@
 #include "MenuController.h"
 #include "PauseController.h"
 #include "LevelController.h"
+#include "BackgroundController.h"
+#include "InstructionsController.h"
 
 #include <time.h>
 
@@ -32,17 +34,24 @@ public:
 
 private:
 	static int level;
+	static int lifes;
+	static int scores;
 
+	static void calculateScore();
+
+	static BackgroundController *backgroundController;
 	static SpacecraftController *spacecraftController;
 	static FloorController *floorController;
 	static HUDController *hudController;
 	static MenuController *menuController;
 	static PauseController *pauseController;
 	static LevelController *levelController;
+	static InstructionsController *instructionsController;
 
 	static void initLevel();
 
 	static bool menu;
+	static bool instructions;
 	static bool powerMotor;
 	static long lastTimePowerMotor;
 	static long lastTimePowerDirection;

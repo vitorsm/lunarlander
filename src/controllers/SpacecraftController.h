@@ -28,8 +28,8 @@ public:
 	virtual ~SpacecraftController();
 	void drawSpacecraft();
 	void updatePosition();
-//	void setPowerMotor(bool power);
-	void setPowerMotor();
+	void setPowerMotor(bool power);
+//	void setPowerMotor();
 	void setLeftPower();
 	void setRightPower();
 	float *getAcceleration();
@@ -39,6 +39,9 @@ public:
 	int getCountExplosionImage();
 	int getAmountExplosionImage();
 	void setInitialPosition();
+	void setInitialFuel(int level);
+	int getSpentFuel();
+	int getFuel();
 private:
 	void setRotate();
 	long lastTime;
@@ -48,6 +51,8 @@ private:
 	long timeLastUpdateMotor;
 	long timeLastUpdateDirection;
 	FloorController *floorController;
+	int fuel;
+	int spentFuel;
 
 	GLuint spacecraftTexture;
 	GLuint fireTexture[40]; // 40 posicoes no vetor pq eu já sei que existem 40 imagens de fogo

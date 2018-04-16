@@ -18,12 +18,19 @@ public:
 	static int RUNWAY_WIDTH;
 	static int SPACECRAFT_WIDTH;
 	static int SPACECRAFT_HEIGHT;
+	static int ALPHA_HEIGHT;
 	static float INITIAL_ACCELERATION;
 	static float POWER_ACCELERATION;
 	static float POWER_DIRECTION_ACCELERATION;
 	static float UNITY_PER_METER;
 	static float MAX_SPEED;
 
+	static float LIFES_SIZE;
+
+	static int INITIAL_FUEL;
+	static int MINIMUM_FUEL;
+
+	static int INITIAL_LIFES;
 	static float FIRE_SIZE;
 
 	static float TEXT_POSITION;

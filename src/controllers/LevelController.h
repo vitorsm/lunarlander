@@ -24,10 +24,11 @@ public:
 	LevelController();
 	virtual ~LevelController();
 	void setLevel(int level);
-	void setLastLevel();
+	void setLastLevel(int lifes);
 	void requestStartLevel();
 	void drawLevel();
 
+	void setScores(int score, int completeScore);
 	void setUpMenu();
 	void setDownMenu();
 	int getSelectedMenu();
@@ -35,10 +36,13 @@ public:
 	static int CONTINUE_MENU_ITEM;
 	static int MENU_MENU_ITEM;
 private:
+	int lifes;
 	int level;
 	int lastLevel;
 	void drawText(void *font, char *s);
 
+	int score;
+	int completeScore;
 	int countMenu;
 };
 

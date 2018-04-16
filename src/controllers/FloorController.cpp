@@ -49,7 +49,7 @@ void FloorController::drawTriangle(Coordinate *lastCoordinate, Coordinate *coord
 		lastCoordinate = new Coordinate(0, 0);
 	}
 
-	glColor3f(0, 0, 1);
+	glColor3f(0.62745098, 0.62745098, 0.62745098);
 
 	glBegin(GL_TRIANGLE_STRIP);
 
@@ -101,12 +101,12 @@ bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 
 			float leftY = this->calculateY(coordinate, nextCoordinate, coordinatesByLine->at(0)->getX());
 
-			if (leftY >= leftCoordinate->getY())
+			if (leftY >= leftCoordinate->getY() + Params::ALPHA_HEIGHT)
 				return true;
 
 			float rightY = this->calculateY(coordinate, nextCoordinate, coordinatesByLine->at(1)->getX());
 
-			if (rightY >= rightCoordinate->getY())
+			if (rightY >= rightCoordinate->getY() + Params::ALPHA_HEIGHT)
 				return true;
 		}
 

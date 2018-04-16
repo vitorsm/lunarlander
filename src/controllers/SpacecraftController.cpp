@@ -19,6 +19,7 @@ SpacecraftController::SpacecraftController(FloorController *floorController) {
 	this->timeLastUpdateDirection = 0;
 	this->floorController = floorController;
 
+	this->fuel = 0;
 	srand(time(NULL));
 
 	this->lastTime = time(0);
@@ -39,6 +40,21 @@ SpacecraftController::~SpacecraftController() {
 	// TODO Auto-generated destructor stub
 }
 
+void SpacecraftController::setInitialFuel(int level) {
+	this->fuel = Params::INITIAL_FUEL - (level * level + 3 * level);
+	this->spentFuel = 0;
+	if (this->fuel < Params::MINIMUM_FUEL) {
+		this->fuel = Params::MINIMUM_FUEL;
+	}
+}
+
+int SpacecraftController::getSpentFuel() {
+	return this->spentFuel;
+}
+
+int SpacecraftController::getFuel() {
+	return this->fuel;
+}
 int SpacecraftController::getAmountExplosionImage() {
 	return this->amountExplosionImage;
 }
@@ -110,7 +126,7 @@ void SpacecraftController::initTexture() {
 
 void SpacecraftController::setPowerMotor(bool power) {
 	this->motorPower = power;
-	this->acceleration[1] = power ? Params::POWER_ACCELERATION : Params::INITIAL_ACCELERATION;
+	this->acceleration[1] = power && this->fuel > 0 ? Params::POWER_ACCELERATION : Params::INITIAL_ACCELERATION;
 }
 
 void SpacecraftController::setLeftPower() {
@@ -146,27 +162,49 @@ void SpacecraftController::setRightPower() {
 void SpacecraftController::updatePosition() {
 
 	if (!this->explosion) {
+//		if (this->motorPower) {
+////			cout << "ligado" << endl;
+//			this->acceleration[1] = Params::POWER_ACCELERATION;
+//			this->motorPower = false;
+//		} else {
+////			cout << "desligado" << endl;
+//			this->acceleration[1] = Params::INITIAL_ACCELERATION;
+//		}
+
 		long currentTime = time(0);
 		float time = (currentTime - this->lastTime);
+
+		if (acceleration[1] > 0) {
+			this->fuel--;
+			this->spentFuel++;
+		}
 
 		float newSpeed = acceleration[0] * Params::UNITY_PER_METER;
 		if (newSpeed <= 3 * Params::MAX_SPEED && newSpeed >= -3 * Params::MAX_SPEED)
 			speed[0] = newSpeed;
 
-		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
-			speed[1] = 0;
-		}
+//		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
+//			speed[1] = 0;
+//		}
+
+
+
+//		if (this->acceleration[1] > 0 && this->speed[1] < 0) {
+////			newSpeed = speed[1] + (1.5 * - speed[1]) * acceleration[1] * Params::UNITY_PER_METER;
+//			newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
+//		} else {
+//			newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
+//		}
 
 		newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
-	//	if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
-	//		speed[1] = newSpeed;
-
-		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
-			speed[1] = 0;
-		} else {
-//			if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
-				speed[1] = newSpeed;
-		}
+		if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
+			speed[1] = newSpeed;
+//		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
+//			speed[1] = 0;
+//		} else {
+////			if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
+//				speed[1] = newSpeed;
+//		}
 
 		this->position->updateBySpeed(speed, time, acceleration[1] > 0);
 
@@ -240,7 +278,7 @@ void SpacecraftController::drawSpacecraft() {
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	if (this->motorPower && !this->explosion) {
+	if (this->motorPower && !this->explosion && this->fuel > 0) {
 		// Desenhar fogo
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1, 1, 1, 1);
