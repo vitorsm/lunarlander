@@ -9,7 +9,7 @@ A implementacao possui 2 camadas:
 
 A classe Main informa as funções de callback da GLUT. Todas as funções de callback estão na classe Controller, que é o controle principal do jogo, todos os outros controles se comunicam com ela. Ela chama todos os controles que precisam desenhar na tela.
 
-´´´c
+```c
 void Controller::drawScene() {
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -52,7 +52,7 @@ void Controller::drawScene() {
 
 	glutSwapBuffers();
 }
-´´´
+```
 ### Controles
 Os controles implementados são:
 * BackgroundController
