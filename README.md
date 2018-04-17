@@ -90,6 +90,24 @@ Tela exibida quando o jogador morre
 Tela exibida quando game over
 ![Game over](/images/7_tela-game-over.png)
 
+## Estrutura de diretorios
+```
+lunarlander
+│   README.md
+│___images
+│
+└───src
+    │   Main.cpp
+    │   Utils.cpp
+    │   Utils.h
+    │
+    └───models
+    |
+    └───controllers
+    |
+    └───resources
+
+```
 ## Funcionalidades extras implementadas
 
 * Superficie nao plana
@@ -102,21 +120,3 @@ Tela exibida quando game over
 * Fogo/explosão
 * Telas do jogo
 
-```
-project
-│   README.md
-│   file001.txt    
-│
-└───folder1
-│   │   file011.txt
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │   file022.txt
-```
