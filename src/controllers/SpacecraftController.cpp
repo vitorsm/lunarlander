@@ -61,7 +61,9 @@ int SpacecraftController::getAmountExplosionImage() {
 int SpacecraftController::getCountExplosionImage() {
 	return this->countExplosionImage;
 }
-
+/***
+ * Cria aleatoriomente uma posicao inicial para nave
+ */
 void SpacecraftController::setInitialPosition() {
 	this->countExplosionImage = 0;
 	this->explosion = false;
@@ -90,6 +92,8 @@ void SpacecraftController::initTexture() {
 	}
 
 	// Pegando a textura do fogo
+	// Existem 40 imagens do fogo, o nome delas e
+	// src/resources/fire/fire_1f_40_i.png, sendo que i vai de 1 a 40.
 	for (int i = 0; i < this->amountFireImage; i++) {
 		char *str = Utils::concatValue("src/resources/fire/fire_1f_40_", (i + 1));
 		str = Utils::concatChar(str, ".png");
@@ -107,6 +111,8 @@ void SpacecraftController::initTexture() {
 	}
 
 	// Pegando a textura da explosao
+	// Existem 20 imagens da explosao, o nome delas e
+	// src/resources/explosion/bubble_exploi.png, sendo que i vai de 1 a 40.
 	for (int i = 0; i < this->amountExplosionImage; i++) {
 		char *str = Utils::concatValue("src/resources/explosion/bubble_explo", (i + 1));
 		str = Utils::concatChar(str, ".png");
@@ -124,11 +130,17 @@ void SpacecraftController::initTexture() {
 	}
 }
 
+/***
+ * Informa se o motor esta ligado ou desligado
+ */
 void SpacecraftController::setPowerMotor(bool power) {
 	this->motorPower = power;
 	this->acceleration[1] = power && this->fuel > 0 ? Params::POWER_ACCELERATION : Params::INITIAL_ACCELERATION;
 }
 
+/***
+ * Informa que o motor para esquerda esta ligado
+ */
 void SpacecraftController::setLeftPower() {
 	float lastAcceleration = this->acceleration[0];
 
@@ -144,6 +156,9 @@ void SpacecraftController::setLeftPower() {
 	this->timeLastUpdateDirection = time(0);
 }
 
+/***
+ * Informa que o motor para direita esta ligado
+ */
 void SpacecraftController::setRightPower() {
 	float lastAcceleration = this->acceleration[0];
 
@@ -159,17 +174,13 @@ void SpacecraftController::setRightPower() {
 	this->timeLastUpdateMotor = time(0);
 }
 
+/***
+ * Atualiza respectivamente a velocidade e a posicao da nave com base na aceleracao
+ */
 void SpacecraftController::updatePosition() {
 
+	// Caso a nave tenha explodido nao e necessario desenha-la
 	if (!this->explosion) {
-//		if (this->motorPower) {
-////			cout << "ligado" << endl;
-//			this->acceleration[1] = Params::POWER_ACCELERATION;
-//			this->motorPower = false;
-//		} else {
-////			cout << "desligado" << endl;
-//			this->acceleration[1] = Params::INITIAL_ACCELERATION;
-//		}
 
 		long currentTime = time(0);
 		float time = (currentTime - this->lastTime);
@@ -183,28 +194,9 @@ void SpacecraftController::updatePosition() {
 		if (newSpeed <= 3 * Params::MAX_SPEED && newSpeed >= -3 * Params::MAX_SPEED)
 			speed[0] = newSpeed;
 
-//		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
-//			speed[1] = 0;
-//		}
-
-
-
-//		if (this->acceleration[1] > 0 && this->speed[1] < 0) {
-////			newSpeed = speed[1] + (1.5 * - speed[1]) * acceleration[1] * Params::UNITY_PER_METER;
-//			newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
-//		} else {
-//			newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
-//		}
-
 		newSpeed = speed[1] + acceleration[1] * Params::UNITY_PER_METER;
 		if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
 			speed[1] = newSpeed;
-//		if (this->acceleration[1] < 0 && this->speed[1] > 0) {
-//			speed[1] = 0;
-//		} else {
-////			if (newSpeed <= 2 * Params::MAX_SPEED && newSpeed >= -2 * Params::MAX_SPEED)
-//				speed[1] = newSpeed;
-//		}
 
 		this->position->updateBySpeed(speed, time, acceleration[1] > 0);
 
@@ -230,7 +222,6 @@ void SpacecraftController::updatePosition() {
 }
 
 void SpacecraftController::setRotate() {
-//	glTranslatef(this->position->getX(), this->position->getY(), 0);
 	float x = this->position->getX() - Params::SPACECRAFT_WIDTH / 2;
 	float y = this->position->getY();
 
@@ -247,6 +238,7 @@ void SpacecraftController::drawSpacecraft() {
 
 	this->setRotate();
 
+	// Desenhando a nave
 	if (!this->explosion || this->countExplosionImage < 6) {
 		float x = this->position->getX() - Params::SPACECRAFT_WIDTH / 2;
 		float y = this->position->getY() - Params::SPACECRAFT_HEIGHT / 2;
@@ -264,6 +256,7 @@ void SpacecraftController::drawSpacecraft() {
 		glDisable(GL_TEXTURE_2D);
 	}
 
+	//Desenhando a explosao
 	if (this->explosion) {
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1, 1, 1, 1);
@@ -278,6 +271,7 @@ void SpacecraftController::drawSpacecraft() {
 		glDisable(GL_TEXTURE_2D);
 	}
 
+	//Desenhando o foguinho da nave
 	if (this->motorPower && !this->explosion && this->fuel > 0) {
 		// Desenhar fogo
 		glEnable(GL_TEXTURE_2D);

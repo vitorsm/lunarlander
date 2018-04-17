@@ -18,6 +18,9 @@ FloorController::~FloorController() {
 }
 
 void FloorController::generateFloor(int level) {
+	// Verifica se a fase e diferente,
+	// Se nao for, o chao sera o mesmo
+	// Pq se o jogador morrer em uma fase ele tem que passar ela.
 	if (level != this->lastLevel) {
 		this->floor->generateFloor(level);
 		this->lastLevel = level;
@@ -64,6 +67,9 @@ void FloorController::drawTriangle(Coordinate *lastCoordinate, Coordinate *coord
 	glEnd();
 }
 
+/***
+ * Desenha a pista de pouso
+ */
 void FloorController::drawRunway() {
 	Coordinate *coordinate = this->floor->getRunwayCoordinate();
 
@@ -78,6 +84,9 @@ void FloorController::drawRunway() {
 	glEnd();
 }
 
+/***
+ * Verifica se a nave esta encostando no chao
+ */
 bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 	Coordinate *leftCoordinate = new Coordinate(spacecraftPosition->getX() - Params::SPACECRAFT_WIDTH / 2,
 			spacecraftPosition->getY() - Params::SPACECRAFT_HEIGHT / 2);
@@ -115,6 +124,9 @@ bool FloorController::isOnTheFloor(Coordinate *spacecraftPosition) {
 	return false;
 }
 
+/***
+ * Verifica se a nave esta na pista de pouso
+ */
 bool FloorController::isOnTheRunway(Coordinate *spacecraftPosition) {
 	Coordinate *coordinate = this->floor->getRunwayCoordinate();
 
@@ -124,6 +136,9 @@ bool FloorController::isOnTheRunway(Coordinate *spacecraftPosition) {
 	return coordinate->getX() <= leftPosition && coordinate->getX() + Params::RUNWAY_WIDTH >= rightPosition;
 }
 
+/***
+ * Calcula um y, ou seja, a altura, com base na posicao x
+ */
 float FloorController::calculateY(Coordinate *c1, Coordinate *c2, float x) {
 	// y = ax + b
 	float a = (c1->getY() - c2->getY()) / (c1->getX() - c2->getX());

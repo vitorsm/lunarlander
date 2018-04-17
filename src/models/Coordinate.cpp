@@ -31,9 +31,6 @@ void Coordinate::print() {
 
 void Coordinate::updateBySpeed(float *speed, long time, bool powerMotor) {
 
-//	if (powerMotor && (this->x + speed[0] >= 0 && this->x + speed[0] <= Params::SCREEN_WIDTH))
-//		this->x += speed[0];
-
 	if ((this->x + speed[0] >= 0 && this->x + speed[0] <= Params::SCREEN_WIDTH))
 		this->x += speed[0];
 

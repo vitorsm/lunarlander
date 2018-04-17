@@ -8,7 +8,6 @@
 #include "BackgroundController.h"
 
 BackgroundController::BackgroundController() {
-
 }
 
 BackgroundController::~BackgroundController() {
@@ -24,6 +23,9 @@ void BackgroundController::initTexture() {
 	);
 }
 
+/***
+ * Apenas desenha a imagem de background
+ */
 void BackgroundController::drawBackground() {
 
 	if (this->backgroundTexture == NULL) {

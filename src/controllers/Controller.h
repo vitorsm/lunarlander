@@ -59,7 +59,7 @@ private:
 	static long lastTimePowerDirection;
 	static bool pause;
 	static bool startLevel;
-	static bool gameOver;
+	static bool exploded;
 	static bool restart;
 	static bool exitGame;
 

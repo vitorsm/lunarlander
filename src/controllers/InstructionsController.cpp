@@ -33,7 +33,6 @@ char instructionsStr[amountLines][100] = {
 		"aterrisar.",
 		"",
 		""
-//		" ........:::::::: Pressione enter para voltar ao menu inicial ::::::::........"
 };
 
 char keys[amountKeyLines][100] = {

@@ -103,7 +103,7 @@ void LevelController::drawLevel() {
 			drawText(GLUT_BITMAP_TIMES_ROMAN_24, Utils::concatChar(Utils::concatValue("Voce passou de fase!! Voce fez: ", this->score), " pontos"));
 		}
 
-		glRasterPos2i(Params::MENU_POSITION_X, Params::MENU_POSITION_Y + 13);
+		glRasterPos2i(Params::MENU_POSITION_X, Params::MENU_POSITION_Y + 10);
 		drawText(GLUT_BITMAP_TIMES_ROMAN_24, Utils::concatValue("Pontuação total: ", this->completeScore));
 
 		float increment = 0;

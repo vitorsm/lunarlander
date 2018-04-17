@@ -1,7 +1,7 @@
 /*
  * ConfirmController.cpp
  *
- *  Created on: 16 de abr de 2018
+ *  Created on: 15 de abr de 2018
  *      Author: vitor
  */
 
@@ -60,6 +60,9 @@ void ConfirmController::drawConfirm() {
 	this->drawMenuItem();
 }
 
+/***
+ * Desenha as opcoes da tela, no caso apenas sim ou nao
+ */
 void ConfirmController::drawMenuItem() {
 
 	if (this->countMenu == YES_MENU_ITEM)

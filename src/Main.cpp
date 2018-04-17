@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : lunarlander.cpp
+// Name        : Main.cpp
 // Author      : Vitor Moreira
 // Version     :
 // Copyright   : 
@@ -19,8 +19,7 @@ using namespace std;
 
 
 void setGlOrtho() {
-//	glOrtho(0.0, (double) Params::SCREEN_WIDTH, 0.0, (double) Params::SCREEN_HEIGHT, -1, 1);
-	glOrtho(0.0, (double) 100, 0.0, (double) 100, -1, 1);
+	glOrtho(0.0, (double) Params::SCREEN_WIDTH, 0.0, (double) Params::SCREEN_HEIGHT, -1, 1);
 }
 
 void setup() {
@@ -40,27 +39,6 @@ void reshape(int width, int height) {
 	glLoadIdentity();
 }
 
-void desenhaCena(void)
-{
-	// Limpa a tela (com a cor definida por glClearColor(r,g,b)) para que
-	// possamos desenhar
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// Começa a usar a cor verde
-	glColor3f(0, 1, 0);
-
-	// Começa a desenhar um polígono com os vértices especificados
-	glBegin(GL_POLYGON);
-		glVertex3f(20, 20, 0);
-		glVertex3f(80, 20, 0);
-		glVertex3f(80, 80, 0);
-		glVertex3f(20, 80, 0);
-	glEnd();
-
-	// Diz ao OpenGL para colocar o que desenhamos na tela
-	glutSwapBuffers();
-}
-
 void glutInitScreen(int *argc, char **argv) {
 	glutInit(argc, argv);
 
@@ -74,7 +52,6 @@ void glutInitScreen(int *argc, char **argv) {
 	glutCreateWindow("Lunar Lander");
 
 	glutDisplayFunc(Controller::drawScene);
-//	glutDisplayFunc(desenhaCena);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(Controller::keyboardCallback);
 	glutSpecialFunc(Controller::keyboardNotAsciiCallback);

@@ -23,6 +23,9 @@ class BackgroundController {
 public:
 	BackgroundController();
 	virtual ~BackgroundController();
+	/***
+	 * Apenas desenha a imagem de background
+	 */
 	void drawBackground();
 private:
 	GLuint backgroundTexture;

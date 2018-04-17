@@ -29,14 +29,16 @@ public:
 	void drawSpacecraft();
 	void updatePosition();
 	void setPowerMotor(bool power);
-//	void setPowerMotor();
 	void setLeftPower();
 	void setRightPower();
 	float *getAcceleration();
 	float *getSpeed();
 	Coordinate *getSpacecraftPosition();
+	// Informa que a nave explodiu
 	void setExplosion(bool explosion);
+	// Pega em qual frame da explosao esta sendo executada
 	int getCountExplosionImage();
+	// Pega a quantidade de frames da explosao
 	int getAmountExplosionImage();
 	void setInitialPosition();
 	void setInitialFuel(int level);
@@ -46,7 +48,7 @@ private:
 	void setRotate();
 	long lastTime;
 	float acceleration[2]; // vetor contendo: { 0: componeneteX, 1: componentY }
-	float speed[2];
+	float speed[2]; // vetor contendo: { 0: componeneteX, 1: componentY }
 	Coordinate *position;
 	long timeLastUpdateMotor;
 	long timeLastUpdateDirection;
@@ -59,10 +61,12 @@ private:
 	GLuint explosionTexture[20]; // 20 posicoes no vetor pq eu já sei que existem 20 imagens de fogo
 	void initTexture();
 
+	// Variaveis para controle da animacao de explosao
 	int amountExplosionImage;
 	int countExplosionImage;
 	bool explosion;
 
+	// Variaveis para controle da animacao do foguinho da nave
 	int amountFireImage;
 	int countFireImage;
 	bool motorPower;
