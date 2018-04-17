@@ -55,7 +55,7 @@ void Controller::drawScene() {
 ```
 
 ### Controles
-O Controller é a classe de controle principal do jogo, ele importa todas as classes de controle do jogo, ou seja, todas as outras classes de controle estão no mesmo nível:
+O Controller é a classe de controle principal do jogo, ele importa todas as outras classes de controle, ou seja, as demais classes de controle estão no mesmo nível:
 * ```BackgroundController```: Responsavel por desenhar o background do jogo, apenas coloca uma imagem no fundo.
 * ```ConfirmController```: Responsavel por desenhar uma tela de confirmação com um texto variavel, o texto é setado. Existem apenas duas opções: Sim ou Não.
 * ```FloorController```: Controle responsavel por tudo que é referente ao chão, como por exemplo: gerar o chão aleatoriamente com base na fase que o jogador está, informar se a nave tocou o chão, ou se a nave está na pista de pouso.
@@ -101,3 +101,22 @@ Tela exibida quando game over
 * Pontuação
 * Fogo/explosão
 * Telas do jogo
+
+```
+project
+│   README.md
+│   file001.txt    
+│
+└───folder1
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───folder2
+    │   file021.txt
+    │   file022.txt
+```
