@@ -94,6 +94,7 @@ Tela exibida quando game over
 ```
 lunarlander
 │   README.md
+|   makefile
 │___images
 │
 └───src
@@ -108,6 +109,9 @@ lunarlander
     └───resources
 
 ```
+
+## makefile
+Para executar o jogo basta estar no diretorio raiz e executar o comando make, após o jogo ser compilado basta usar o comando make run
 ## Funcionalidades extras implementadas
 
 * Superficie nao plana
