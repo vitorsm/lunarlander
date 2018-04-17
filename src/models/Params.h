@@ -24,7 +24,7 @@ public:
 	static int SPACECRAFT_HEIGHT;
 
 	// Variavel para correcao da altura da nave em relacao a textura.
-	static int ALPHA_HEIGHT;
+	static int ALPHA_HEIGHT;;
 
 	// Valores das aceleracoes
 	static float INITIAL_ACCELERATION;
