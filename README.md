@@ -35,25 +35,25 @@ O Controller é a classe de controle principal do jogo, ele importa todas as cla
 
 * ```ConfirmController```: Responsavel por desenhar uma tela de confirmação com um texto variavel, o texto é setado. Existem apenas duas opções: Sim ou Não.
 
-*```FloorController```: Controle responsavel por tudo que é referente ao chão, como por exemplo: gerar o chão aleatoriamente com base na fase que o jogador está, informar se a nave tocou o chão, ou se a nave está na pista de pouso.
+* ```FloorController```: Controle responsavel por tudo que é referente ao chão, como por exemplo: gerar o chão aleatoriamente com base na fase que o jogador está, informar se a nave tocou o chão, ou se a nave está na pista de pouso.
 
-*```HUDController```: Controle de HUD, coloca os dados de status do para a visualizacao do jogador na tela, como por exemplo: quantidade de vidas, quantiadade de combustível, velocidade e etc.
+* ```HUDController```: Controle de HUD, coloca os dados de status do para a visualizacao do jogador na tela, como por exemplo: quantidade de vidas, quantiadade de combustível, velocidade e etc.
 
-*```InstructionsController```: Apenas exibe as instruções do jogo.
+* ```InstructionsController```: Apenas exibe as instruções do jogo.
 
-*```LevelController```: Exibe a tela que mostra o status do fim da fase, informando se o jogador passou de fase ou se não passou, e no caso de não ter passado, informa o motivo do fracasso.
+* ```LevelController```: Exibe a tela que mostra o status do fim da fase, informando se o jogador passou de fase ou se não passou, e no caso de não ter passado, informa o motivo do fracasso.
 
-*```MenuController```: Controle do menu principal.
+* ```MenuController```: Controle do menu principal.
 
-*```PauseController```: Responsavel pelo pause do jogo, implementa opções de voltar ao jogo, reiniciar o jogo ou voltar ao menu principal.
+* ```PauseController```: Responsavel pelo pause do jogo, implementa opções de voltar ao jogo, reiniciar o jogo ou voltar ao menu principal.
 
-*```SpacecraftController```: Controle da nave espacial, atualiza os dados de velocidade e posicao, com base na aceleração. É reponsavel por exibir o "foguinho" da nave e no caso de explosão, desenhá-la na tela.
+* ```SpacecraftController```: Controle da nave espacial, atualiza os dados de velocidade e posicao, com base na aceleração. É reponsavel por exibir o "foguinho" da nave e no caso de explosão, desenhá-la na tela.
 
 O código do jogo possui comentários para explicação de partes onde existe alguma logica complexa.
 
 ## Resultado
+Tela inicial do jogo contendo as 3 opções do Menu principal. 
 ![Tela inicial do jogo](/images/1_menu-principal.png)
-Format: ![Imagem mostrando a tela inicial do jogo]
 ## Funcionalidades extras implementadas
 
 * Superficie nao plana
