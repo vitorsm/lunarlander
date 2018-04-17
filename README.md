@@ -68,28 +68,6 @@ O Controller é a classe de controle principal do jogo, ele importa todas as out
 
 O código do jogo possui comentários para explicação de partes onde existe alguma logica complexa.
 
-## Resultado
-Tela inicial do jogo contendo as 3 opções do Menu principal. 
-![Tela inicial do jogo](/images/1_menu-principal.png)
-
-Jogo sendo executado
-![Jogo rodando](/images/2_jogo-rodando.png)
-
-Tela exibida no fim de uma fase ( ```LevelController``` )
-![Fim de jogo](/images/3_tela-fim-de-jogo.png)
-
-Tela de pause contendo as 3 opções de menu pause
-![Pause](/images/4_tela-pause.png)
-
-Tela exibida quando o jogador deseja reinicar ou fechar o jogo, variando apenas o texto de confirmçaõ
-![Tela de confirmação](/images/5_tela-confirmacao.png)
-
-Tela exibida quando o jogador morre
-![Jogador morreu](/images/6_tela-fim-de-jogo-perdeu.png)
-
-Tela exibida quando game over
-![Game over](/images/7_tela-game-over.png)
-
 ## Estrutura de diretorios
 ```
 lunarlander
@@ -112,6 +90,29 @@ lunarlander
 
 ## makefile
 Para executar o jogo basta estar no diretorio raiz e executar o comando make, após o jogo ser compilado basta usar o comando make run
+
+## Resultado
+Tela inicial do jogo contendo as 3 opções do Menu principal. 
+![Tela inicial do jogo](/images/1_menu-principal.png)
+
+Jogo sendo executado
+![Jogo rodando](/images/2_jogo-rodando.png)
+
+Tela exibida no fim de uma fase ( ```LevelController``` )
+![Fim de jogo](/images/3_tela-fim-de-jogo.png)
+
+Tela de pause contendo as 3 opções de menu pause
+![Pause](/images/4_tela-pause.png)
+
+Tela exibida quando o jogador deseja reinicar ou fechar o jogo, variando apenas o texto de confirmçaõ
+![Tela de confirmação](/images/5_tela-confirmacao.png)
+
+Tela exibida quando o jogador morre
+![Jogador morreu](/images/6_tela-fim-de-jogo-perdeu.png)
+
+Tela exibida quando game over
+![Game over](/images/7_tela-game-over.png)
+
 ## Funcionalidades extras implementadas
 
 * Superficie nao plana
